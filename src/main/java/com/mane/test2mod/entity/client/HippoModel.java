@@ -5,17 +5,21 @@
 package com.mane.test2mod.entity.client;
 
 
+import com.mane.test2mod.entity.animations.HippoAnimationDefinitions;
+import com.mane.test2mod.entity.custom.HippoEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-public class HippoModel<T extends Entity> extends EntityModel<T>
+public class HippoModel<T extends Entity> extends HierarchicalModel<T>
 {
 	private final ModelPart hippo;
 	private final ModelPart Body;
@@ -99,13 +103,42 @@ public class HippoModel<T extends Entity> extends EntityModel<T>
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+	{
+		this.hippo.getAllParts().forEach(ModelPart::resetPose);
+		this.applyHeadRotation((HippoEntity) entity, netHeadYaw, headPitch, ageInTicks);
 
+		if(((HippoEntity) entity).isAggressive())
+		{
+			this.animateWalk(HippoAnimationDefinitions.HIPPO_CHASE, limbSwing, limbSwingAmount, 2f, 2f);
+		}
+		else
+		{
+			this.animateWalk(HippoAnimationDefinitions.HIPPO_WALK, limbSwing, limbSwingAmount, 1f, 1.5f);
+		}
+		this.animate(((HippoEntity) entity).idleAnimationState, HippoAnimationDefinitions.HIPPO_IDLE, ageInTicks, 0.5f);
+		this.animate(((HippoEntity) entity).attackAnimationState, HippoAnimationDefinitions.HIPPO_ATTACK, ageInTicks, 1f);
+	}
+
+
+	private void applyHeadRotation(HippoEntity pEntity, float pNetHeadYaw, float pHeadPitch, float pAgeInTicks)
+	{
+		pNetHeadYaw = Mth.clamp(pNetHeadYaw, -30.0F, 30.0F);
+		pHeadPitch = Mth.clamp(pHeadPitch, -25.0F, 45.0F);
+
+		this.Head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+		this.Head.xRot = pHeadPitch * ((float)Math.PI / 180F);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		hippo.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
-	
+
+	@Override
+	public ModelPart root()
+	{
+		return hippo;
+	}
+
 }

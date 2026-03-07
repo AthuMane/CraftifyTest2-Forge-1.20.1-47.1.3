@@ -1,7 +1,15 @@
 package com.mane.test2mod;
 
+import com.mane.test2mod.entity.ModEntities;
+import com.mane.test2mod.entity.client.HippoRenderer;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -45,6 +53,8 @@ public class Test2Mod
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        ModEntities.register(modEventBus);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -72,7 +82,11 @@ public class Test2Mod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            event.enqueueWork(() ->
+            {
+                EntityRenderers.register(ModEntities.HIPPO.get(), HippoRenderer::new);
 
+            });
         }
     }
 }

@@ -17,7 +17,7 @@ public class HippoRenderer extends MobRenderer<HippoEntity, HippoModel<HippoEnti
 {
 
     public HippoRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext, new HippoModel<>(pContext.bakeLayer(ModModelLayers.HIPPO_LAYER)), 2f);
+        super(pContext, new HippoModel<>(pContext.bakeLayer(ModModelLayers.HIPPO_LAYER)), 1f);
     }
 
 
@@ -29,11 +29,18 @@ public class HippoRenderer extends MobRenderer<HippoEntity, HippoModel<HippoEnti
 
     @Override
     public void render(HippoEntity pEntity, float pEntityYaw, float pPartialTicks,
-                       PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+                       PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight)
+    {
         if(pEntity.isBaby()) {
             pMatrixStack.scale(0.45f, 0.45f, 0.45f);
         }
 
+        pMatrixStack.pushPose();
+
+        pMatrixStack.scale(2F, 2F, 2F);
+
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+
+        pMatrixStack.popPose();
     }
 }
