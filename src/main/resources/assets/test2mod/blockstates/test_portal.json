@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "test2mod:block/test_portal" }
+  }
+}

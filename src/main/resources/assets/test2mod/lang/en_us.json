@@ -1,0 +1,16 @@
+{
+
+  "block.test2mod.display_block": "Display Block",
+  "block.test2mod.test_portal": "Test Portal",
+  "entity.test2mod.hippo": "Hippo",
+  "item.test2mod.hippo_spawn_egg": "Hippo Spawn Egg",
+  "enchantment.test2mod.floater": "Floater",
+  "item.test2mod.grenade": "Grenade",
+  "effect.test2mod.paralysis": "Paralysis",
+
+  "item.minecraft.potion.effect.paralysis_potion": "Paralysis Potion",
+  "item.minecraft.splash_potion.effect.paralysis_potion": "Paralysis Splash Potion",
+  "item.minecraft.lingering_potion.effect.paralysis_potion": "Paralysis Lingering Potion",
+
+  "creativetab.test2_tab": "Test2 Tab"
+}

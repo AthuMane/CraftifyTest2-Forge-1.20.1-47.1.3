@@ -17,6 +17,14 @@ public class ModEntities {
             ENTITY_TYPES.register("hippo", () -> EntityType.Builder.of(HippoEntity::new, MobCategory.CREATURE)
                     .sized(2f, 1.8f).build("hippo"));
 
+    public static final RegistryObject<EntityType<GrenadeEntity>> GRENADE_ENTITTY =
+            ENTITY_TYPES.register("grenade_entity",
+                    () -> EntityType.Builder
+                            .<GrenadeEntity>of(GrenadeEntity::new, MobCategory.MISC)
+                            .sized(0.25f, 0.25f)
+                            .clientTrackingRange(4)
+                            .updateInterval(10)
+                            .build("grenade_entity"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

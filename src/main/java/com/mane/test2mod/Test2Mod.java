@@ -1,13 +1,22 @@
 package com.mane.test2mod;
 
+import com.mane.test2mod.block.ModBlocks;
+import com.mane.test2mod.block.entity.ModBlockEntities;
+import com.mane.test2mod.block.entity.renderer.DisplayBlockRenderer;
+import com.mane.test2mod.effect.ModEffects;
+import com.mane.test2mod.enchantment.ModEnchantments;
 import com.mane.test2mod.entity.ModEntities;
 import com.mane.test2mod.entity.client.HippoRenderer;
+import com.mane.test2mod.item.ModCreativeModeTabs;
+import com.mane.test2mod.item.ModItems;
+import com.mane.test2mod.potion.ModPotions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.Registries;
@@ -44,7 +53,7 @@ public class Test2Mod
     // Define mod id in a common place for everything to reference
     public static final String MODID = "test2mod";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public Test2Mod()
     {
@@ -53,8 +62,17 @@ public class Test2Mod
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModEntities.register(modEventBus);
+        ModEnchantments.register(modEventBus);
+        ModEffects.register(modEventBus);
+        ModPotions.register(modEventBus);
+        ModCreativeModeTabs.register(modEventBus);
 
+        MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::addCreative);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -85,7 +103,9 @@ public class Test2Mod
             event.enqueueWork(() ->
             {
                 EntityRenderers.register(ModEntities.HIPPO.get(), HippoRenderer::new);
-
+                BlockEntityRenderers.register(ModBlockEntities.DISPLAY_BLOCK_BE.get(), DisplayBlockRenderer::new);
+                ItemBlockRenderTypes.setRenderLayer(ModBlocks.DISPLAY_BLOCK.get(), RenderType.cutout());
+                EntityRenderers.register(ModEntities.GRENADE_ENTITTY.get(), ThrownItemRenderer::new);
             });
         }
     }

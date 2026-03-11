@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "test2mod:block/display_block" }
+  }
+}

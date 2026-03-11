@@ -108,13 +108,22 @@ public class HippoModel<T extends Entity> extends HierarchicalModel<T>
 		this.hippo.getAllParts().forEach(ModelPart::resetPose);
 		this.applyHeadRotation((HippoEntity) entity, netHeadYaw, headPitch, ageInTicks);
 
-		if(((HippoEntity) entity).isAggressive())
+		float eatAngle = ((HippoEntity) entity).getHeadEatAngleScale(ageInTicks);
+
+		this.Head.xRot = eatAngle;
+
+		if (((HippoEntity) entity).eatAnimationTick > 0)
 		{
-			this.animateWalk(HippoAnimationDefinitions.HIPPO_CHASE, limbSwing, limbSwingAmount, 2f, 2f);
+			this.Jaw2.xRot = 0.35F * Mth.sin(ageInTicks * 0.45F);
+		}
+
+		if(((HippoEntity) entity).isAngry())
+		{
+			this.animateWalk(HippoAnimationDefinitions.HIPPO_CHASE, limbSwing, limbSwingAmount, 2f, 1.5f);
 		}
 		else
 		{
-			this.animateWalk(HippoAnimationDefinitions.HIPPO_WALK, limbSwing, limbSwingAmount, 1f, 1.5f);
+			this.animateWalk(HippoAnimationDefinitions.HIPPO_WALK, limbSwing, limbSwingAmount, 2f, 1.5f);
 		}
 		this.animate(((HippoEntity) entity).idleAnimationState, HippoAnimationDefinitions.HIPPO_IDLE, ageInTicks, 0.5f);
 		this.animate(((HippoEntity) entity).attackAnimationState, HippoAnimationDefinitions.HIPPO_ATTACK, ageInTicks, 1f);
