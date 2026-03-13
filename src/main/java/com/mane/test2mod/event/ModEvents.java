@@ -20,11 +20,14 @@ public class ModEvents{
 
         Player player = event.player;
 
-        if(player.isCreative()){return;}
+        if(player.getAbilities().flying){return;}
 
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 
-        int floaterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FLOATER.get(), player);
+        int floaterLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FLOATER.get(), helmet) +
+                EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FLOATER.get(), chest);
 
         int depthStriderLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.DEPTH_STRIDER, boots);
 

@@ -24,14 +24,6 @@ import net.minecraft.world.entity.player.Player;
 
             entity.setDeltaMovement(0, entity.getDeltaMovement().y, 0);
 
-            if (entity instanceof Player player) {
-                player.setJumping(false);
-            }
-
-            if (entity.getDeltaMovement().y > 0) {
-                entity.setDeltaMovement(0, 0, 0);
-            }
-
             super.applyEffectTick(entity, amplifier);
         }
 

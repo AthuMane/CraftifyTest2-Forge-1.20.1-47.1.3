@@ -11,6 +11,7 @@
   "item.minecraft.potion.effect.paralysis_potion": "Paralysis Potion",
   "item.minecraft.splash_potion.effect.paralysis_potion": "Paralysis Splash Potion",
   "item.minecraft.lingering_potion.effect.paralysis_potion": "Paralysis Lingering Potion",
+  "item.minecraft.tipped_arrow.effect.paralysis_potion": "Arrow of Paralysis",
 
   "creativetab.test2_tab": "Test2 Tab"
 }

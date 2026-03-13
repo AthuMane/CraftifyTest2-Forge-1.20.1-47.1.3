@@ -45,7 +45,6 @@ public class DisplayBlock extends BaseEntityBlock
 
             ItemStack held = player.getItemInHand(hand);
 
-            // PLACE item (only if block is empty)
             if(display.getItem().isEmpty() && !held.isEmpty()) {
 
                 ItemStack copy = held.copyWithCount(1);
@@ -53,10 +52,12 @@ public class DisplayBlock extends BaseEntityBlock
 
                 held.shrink(1);
 
+                grantAdvancement(player);
+
+
                 return InteractionResult.CONSUME;
             }
 
-            // REMOVE item (only if block has one)
             if(!display.getItem().isEmpty())
             {
 
@@ -66,31 +67,50 @@ public class DisplayBlock extends BaseEntityBlock
 
                 return InteractionResult.CONSUME;
             }
-
-            //Advancement
-
-            if(player instanceof ServerPlayer serverPlayer)
-            {
-                Advancement advancement = serverPlayer.server.getAdvancements()
-                        .getAdvancement(new ResourceLocation(Test2Mod.MODID, "used_display_block"));
-
-                if (advancement != null)
-                {
-                    AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
-
-                    if (!progress.isDone())
-                    {
-                        for (String criterion : progress.getRemainingCriteria())
-                        {
-                            serverPlayer.getAdvancements().award(advancement, criterion);
-                        }
-                    }
-                }
-            }
-
         }
 
         return InteractionResult.PASS;
+    }
+
+    private void grantAdvancement(Player player) {
+
+        if(player instanceof ServerPlayer serverPlayer) {
+
+            Advancement advancement = serverPlayer.server.getAdvancements()
+                    .getAdvancement(new ResourceLocation(Test2Mod.MODID, "used_display_block"));
+
+            if (advancement != null) {
+
+                AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
+
+                if (!progress.isDone()) {
+                    for (String criterion : progress.getRemainingCriteria()) {
+                        serverPlayer.getAdvancements().award(advancement, criterion);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+    {
+        if(!state.is(newState.getBlock()))
+        {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            if(blockEntity instanceof DisplayBlockEntity display)
+            {
+                ItemStack stack = display.getItem();
+
+                if(!stack.isEmpty())
+                {
+                    popResource(level, pos, stack);
+                }
+            }
+
+            super.onRemove(state, level, pos, newState, isMoving);
+        }
     }
 
     @Override

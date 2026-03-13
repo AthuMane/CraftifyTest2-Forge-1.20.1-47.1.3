@@ -1,11 +1,14 @@
 package com.mane.test2mod.enchantment;
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class FloaterEnchantment extends Enchantment {
+
 
     protected FloaterEnchantment(Rarity pRarity, EnchantmentCategory pCategory, EquipmentSlot[] pApplicableSlots)
     {
@@ -13,7 +16,28 @@ public class FloaterEnchantment extends Enchantment {
     }
 
     @Override
-    public int getMaxLevel() {return 1;}
+    public int getMaxLevel() {
+        return 1;
+    }
+
+    @Override
+    public boolean canEnchant(ItemStack stack) {
+        if(stack.getItem() instanceof ArmorItem armor) {
+            return armor.getEquipmentSlot() == EquipmentSlot.HEAD ||
+                    armor.getEquipmentSlot() == EquipmentSlot.CHEST;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack)
+    {
+        if(stack.getItem() instanceof ArmorItem armor) {
+            return armor.getEquipmentSlot() == EquipmentSlot.HEAD ||
+                    armor.getEquipmentSlot() == EquipmentSlot.CHEST;
+        }
+        return false;
+    }
 
     @Override
     protected boolean checkCompatibility(Enchantment other) {
